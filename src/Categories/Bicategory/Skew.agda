@@ -11,27 +11,49 @@ open import Categories.Category.Monoidal.Instance.Cats using (module Product)
 open import Categories.Enriched.Category using () renaming (Category to Enriched)
 open import Categories.Functor using (module Functor)
 open import Categories.NaturalTransformation.NaturalIsomorphism using (NaturalIsomorphism)
-{-
--- https://ncatlab.org/nlab/show/bicategory
--- notice that some axioms in nLab are inconsistent. they have been fixed in this definition.
-record Bicategory o ℓ e t : Set (suc (o ⊔ ℓ ⊔ e ⊔ t)) where
-  field
-    enriched : Enriched (Product.Cats-Monoidal {o} {ℓ} {e}) t
 
-  open Enriched enriched public
-  module hom {A B} = Category (hom A B)
-  module ComHom {A B} = Commutation (hom A B)
+{- -- Based on the definition in:
+
+  A skew bicategory is like a bicategory, but the associator and/or
+  unitors don't have to be invertible. Lack and Street developed this
+  concept in this paper:
+
+  Stephen Lack and Ross Street. On monads and warpings. Cahiers de topologie et géométrie
+  diﬀérentielle catégoriques, LV(4):244–266, 2014. ISSN 1245-530X.
+
+
+  Since we have 3 degrees of freedom, skew bicategory is in fact a
+  3-trit paratmertised definition, depending whether the associator,
+  left, and right unitors are left-skewed, right-skewed, or
+  invertible.
+
+  There might be a nice way to index this module in a way that defines
+  all 3 simultaneously. Someone cleverer than us should do it.
+
+  We will define the so-called right-skew bicategories only.
+
+-}
+record Skew o ℓ e t : Set (suc (o ⊔ ℓ ⊔ e ⊔ t)) where
+  {- The non-skew definition, uses an `enriched` substructure to pack most of the data needed for a bicategory.
+     This doesn't work for skew version. In detail: the non-skew version has natural isos for the associator and unitors
+     which coincides with the setoid we choose for the cat-enrichment in `enriched`. For the skew version, we need
+     mere natural transformations, which don't form a setoid, and so we cannot use that shortcut.
+
+  -}
 
   infix 4 _⇒₁_ _⇒₂_ _≈_
-  infixr 7 _∘ᵥ_ _∘₁_
+  infixr 7 _∘ᵥ_ _∘₁_ _⊗_
   infixr 9 _▷_
   infixl 9 _◁_
   infixr 11 _⊚₀_ _⊚₁_  _∘ₕ_
 
-  _⇒₁_ : Obj → Obj → Set o
-  A ⇒₁ B = Category.Obj (hom A B)
+  field
+    Obj : Set o
+    _⇒₁_ : Obj → Obj → Set o
+    _⇒₂_ : {A B : Obj} → A ⇒₁ B → A ⇒₁ B → Set ℓ
+{-
 
-  _⇒₂_ : {A B : Obj} → A ⇒₁ B → A ⇒₁ B → Set ℓ
+
   _⇒₂_ = hom._⇒_
 
   _⊚₀_ : {A B C : Obj} → B ⇒₁ C → A ⇒₁ B → A ⇒₁ C
