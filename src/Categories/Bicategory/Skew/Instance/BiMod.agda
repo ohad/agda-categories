@@ -19,15 +19,17 @@ open import Categories.Category.Instance.Setoids
 import Categories.Morphism.Reasoning as MR
 
 -- help with levels! Do we really need to bump the first one?
-Cats : (o ℓ e : Level) →
+BiModules : (o ℓ e : Level) →
   Skew (suc (o ⊔ ℓ ⊔ e))
        (suc (o ⊔ ℓ ⊔ e))
        (o ⊔ e)
        (suc (o ⊔ ℓ ⊔ e))
-Cats o ℓ e = record
+BiModules o ℓ e = record
   { Obj = Category o ℓ e
-  ; _⇒₁_ = λ a b → Functor {!Product (op a) ?!} {!!}
-  ; _⇒₂_ = {!!}
+  ; _⇒₁_ = λ a b →
+      Functor (Product (Category.op a) b)
+                       (Setoids e {!!})
+  ; _⇒₂_ = λ f g → {!!}
   }
 {-
 record
