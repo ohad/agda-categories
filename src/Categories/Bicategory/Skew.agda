@@ -10,7 +10,7 @@ open import Categories.Category using (Category; module Commutation)
 open import Categories.Category.Monoidal.Instance.Cats using (module Product)
 open import Categories.Enriched.Category using () renaming (Category to Enriched)
 open import Categories.Functor using (module Functor)
-open import Categories.NaturalTransformation.NaturalIsomorphism using (NaturalIsomorphism)
+open import Categories.NaturalTransformation using (NaturalTransformation)
 
 {- -- Based on the definition in:
 
@@ -41,16 +41,50 @@ record Skew o ℓ e t : Set (suc (o ⊔ ℓ ⊔ e ⊔ t)) where
 
   -}
 
-  infix 4 _⇒₁_ _⇒₂_ _≈_
-  infixr 7 _∘ᵥ_ _∘₁_ _⊗_
-  infixr 9 _▷_
-  infixl 9 _◁_
-  infixr 11 _⊚₀_ _⊚₁_  _∘ₕ_
+  infix 4 _⇒₁_ _⇒₂_
+  infixr 7 _∘ᵥ_ _∘₁_
+  infixr 11 _⊗₂_
 
   field
     Obj : Set o
-    _⇒₁_ : Obj → Obj → Set o
+
+    -- 1-cells
+    --_⇒₁_ : Obj → Obj → Set o
+    _⇒₁_ : Rel Obj ℓ
+    --_≈_ : {A B : Obj} → Rel (A ⇒₁ B) e  -- might not need this
+    id₁ : {A : Obj} -> A ⇒₁ A
+    _∘₁_ : {A B C : Obj} -> B ⇒₁ C → A ⇒₁ B → A ⇒₁ C
+
+  _⊗_ : {A B C : Obj} -> A ⇒₁ B → B ⇒₁ C → A ⇒₁ C
+  f ⊗ g = g ∘₁ f
+
+  field
+    -- 2-cells
     _⇒₂_ : {A B : Obj} → A ⇒₁ B → A ⇒₁ B → Set ℓ
+    _≈_ : {A B : Obj} {f g : A ⇒₁ B} → Rel (f ⇒₂ g) e
+    id₂ : {A B : Obj} {f : A ⇒₁ B} → f ⇒₂ f
+    _⊗₂_ : {A B C : Obj} {g i : B ⇒₁ C} {f h : A ⇒₁ B} → f ⇒₂ h → g ⇒₂ i → g ∘₁ f ⇒₂ i ∘₁ h
+    _∘ᵥ_ : {A B : Obj} {f g h : A ⇒₁ B} -> (β : g ⇒₂ h) → (α : f ⇒₂ g) → f ⇒₂ h
+
+
+  --private
+    λ⇒ : {A B : Obj} {f : A ⇒₁ B} → (id₁ ⊗ f) ⇒₂ f
+    ρ'⇒ : {A B : Obj} {f : A ⇒₁ B} → f ⇒₂ f ⊗ id₁
+    α⇒ : {A B C D : Obj} {f : A ⇒₁ B} {g : B ⇒₁ C} {h : C ⇒₁ D} →
+          ((f ⊗ g) ⊗ h) ⇒₂ (f ⊗ (g ⊗ h))
+
+  assoc : {A B C D : Obj} → (f : A ⇒₁ B) → (g : B ⇒₁ C) → (h : C ⇒₁ D)
+          → ((f ⊗ g) ⊗ h) ⇒₂ (f ⊗ (g ⊗ h))
+  assoc f g h = α⇒
+
+  field
+    makeThisFieldNonEmpty : Set
+    -- vertical/horiz 2-cell comp preserve ≈
+
+
+    pentagon : {A B C D E : Obj} {f : A ⇒₁ B} {g : B ⇒₁ C} {h : C ⇒₁ D} {k : D ⇒₁ E}
+      → (assoc f g (h ⊗ k) ∘ᵥ assoc (f ⊗ g) h k) ≈ (((id₂ ⊗₂ α⇒) ∘ᵥ α⇒) ∘ᵥ (α⇒ ⊗₂ id₂))
+
 {-
 
 
