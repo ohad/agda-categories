@@ -60,7 +60,7 @@ record Skew o ℓ e t : Set (suc (o ⊔ ℓ ⊔ e ⊔ t)) where
 
   field
     -- 2-cells
-    _⇒₂_ : {A B : Obj} → A ⇒₁ B → A ⇒₁ B → Set ℓ
+    _⇒₂_ : {A B : Obj} → A ⇒₁ B → A ⇒₁ B → Set e
     _≈_ : {A B : Obj} {f g : A ⇒₁ B} → Rel (f ⇒₂ g) e
     id₂ : {A B : Obj} {f : A ⇒₁ B} → f ⇒₂ f
     _⊗₂_ : {A B C : Obj} {g i : B ⇒₁ C} {f h : A ⇒₁ B} → f ⇒₂ h → g ⇒₂ i → g ∘₁ f ⇒₂ i ∘₁ h
@@ -152,3 +152,30 @@ record Skew o ℓ e t : Set (suc (o ⊔ ℓ ⊔ e ⊔ t)) where
                    α⇒
                  ⟩
 -}
+
+open import Categories.Category.Construction.Presheaves using (Presheaves)
+open import Categories.Category.Construction.Functors
+open import Categories.Category.Product using (Product)
+open import Categories.Category.Instance.Setoids using (Setoids)
+open import Data.Product using (Σ; _×_)
+
+-- Move this to Skew/Constructions/Bimodules
+SkewBimod : {o ℓ e t o′ ℓ′ : Level} → Skew (suc (o ⊔ ℓ ⊔ e)) (o ⊔ ℓ ⊔ e ⊔ suc o′ ⊔ suc ℓ′) (o ⊔ ℓ ⊔ o′ ⊔ ℓ′) t
+SkewBimod {o} {ℓ} {e} .Skew.Obj = Category o ℓ e
+SkewBimod {o′ = o′} {ℓ′ = ℓ′} .Skew._⇒₁_ 𝔸 𝔹 = Presheaves {o′ = o′} {ℓ′ = ℓ′} (Product (Category.op 𝔸) 𝔹) .Category.Obj
+SkewBimod .Skew.id₁ = {!!}
+Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.F₀ (a , c) = {!!}  -- Product of setoids
+Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.F₁ = {!!}
+Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.identity = {!!}
+Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.homomorphism = {!!}
+Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.F-resp-≈ = {!!}
+SkewBimod .Skew._⇒₂_ {A = 𝔸} {B = 𝔹} p q = NaturalTransformation p q
+SkewBimod .Skew._≈_ = {!!}
+SkewBimod .Skew.id₂ = {!!}
+SkewBimod .Skew._⊗₂_ = {!!}
+SkewBimod .Skew._∘ᵥ_ = {!!}
+SkewBimod .Skew.λ⇒ = {!!}
+SkewBimod .Skew.ρ'⇒ = {!!}
+SkewBimod .Skew.α⇒ = {!!}
+SkewBimod .Skew.makeThisFieldNonEmpty = {!!}
+SkewBimod .Skew.pentagon = {!!}
