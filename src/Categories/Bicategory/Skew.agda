@@ -63,13 +63,15 @@ record Skew o ℓ e t : Set (suc (o ⊔ ℓ ⊔ e ⊔ t)) where
     _⇒₂_ : {A B : Obj} → A ⇒₁ B → A ⇒₁ B → Set e
     _≈_ : {A B : Obj} {f g : A ⇒₁ B} → Rel (f ⇒₂ g) e
     id₂ : {A B : Obj} {f : A ⇒₁ B} → f ⇒₂ f
-    _⊗₂_ : {A B C : Obj} {g i : B ⇒₁ C} {f h : A ⇒₁ B} → f ⇒₂ h → g ⇒₂ i → g ∘₁ f ⇒₂ i ∘₁ h
+    _∘ₕ_ : {A B C : Obj} {g i : B ⇒₁ C} {f h : A ⇒₁ B} → g ⇒₂ i → f ⇒₂ h → g ∘₁ f ⇒₂ i ∘₁ h
     _∘ᵥ_ : {A B : Obj} {f g h : A ⇒₁ B} -> (β : g ⇒₂ h) → (α : f ⇒₂ g) → f ⇒₂ h
 
+  _⊗₂_ : {A B C : Obj} {g i : B ⇒₁ C} {f h : A ⇒₁ B} → f ⇒₂ h → g ⇒₂ i → g ∘₁ f ⇒₂ i ∘₁ h
+  f ⊗₂ g = g ∘ₕ f
 
-  --private
+  field
     λ⇒ : {A B : Obj} {f : A ⇒₁ B} → (id₁ ⊗ f) ⇒₂ f
-    ρ'⇒ : {A B : Obj} {f : A ⇒₁ B} → f ⇒₂ f ⊗ id₁
+    ρ′⇒ : {A B : Obj} {f : A ⇒₁ B} → f ⇒₂ f ⊗ id₁
     α⇒ : {A B C D : Obj} {f : A ⇒₁ B} {g : B ⇒₁ C} {h : C ⇒₁ D} →
           ((f ⊗ g) ⊗ h) ⇒₂ (f ⊗ (g ⊗ h))
 
@@ -78,13 +80,13 @@ record Skew o ℓ e t : Set (suc (o ⊔ ℓ ⊔ e ⊔ t)) where
   assoc f g h = α⇒
 
   field
-    makeThisFieldNonEmpty : Set
     -- vertical/horiz 2-cell comp preserve ≈
 
-
     pentagon : {A B C D E : Obj} {f : A ⇒₁ B} {g : B ⇒₁ C} {h : C ⇒₁ D} {k : D ⇒₁ E}
-      → (assoc f g (h ⊗ k) ∘ᵥ assoc (f ⊗ g) h k) ≈ (((id₂ ⊗₂ α⇒) ∘ᵥ α⇒) ∘ᵥ (α⇒ ⊗₂ id₂))
+             → (assoc f g (h ⊗ k) ∘ᵥ assoc (f ⊗ g) h k) ≈ (((id₂ ⊗₂ α⇒) ∘ᵥ α⇒) ∘ᵥ (α⇒ ⊗₂ id₂))
 
+    rectangle : {A B C : Obj} {f : A ⇒₁ B} {g : B ⇒₁ C}
+              → (((ρ′⇒ ⊗₂ id₂) ∘ₕ α⇒) ∘ₕ (id₂ ⊗₂ λ⇒)) ≈ id₂
 {-
 
 
@@ -163,7 +165,7 @@ open import Data.Product using (Σ; _×_)
 SkewBimod : {o ℓ e t o′ ℓ′ : Level} → Skew (suc (o ⊔ ℓ ⊔ e)) (o ⊔ ℓ ⊔ e ⊔ suc o′ ⊔ suc ℓ′) (o ⊔ ℓ ⊔ o′ ⊔ ℓ′) t
 SkewBimod {o} {ℓ} {e} .Skew.Obj = Category o ℓ e
 SkewBimod {o′ = o′} {ℓ′ = ℓ′} .Skew._⇒₁_ 𝔸 𝔹 = Presheaves {o′ = o′} {ℓ′ = ℓ′} (Product (Category.op 𝔸) 𝔹) .Category.Obj
-SkewBimod .Skew.id₁ = {!!}
+SkewBimod {o′ = o′} {ℓ′ = ℓ′} .Skew.id₁ {A = 𝔸} = {!!}
 Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.F₀ (a , c) = {!!}  -- Product of setoids
 Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.F₁ = {!!}
 Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.identity = {!!}
@@ -172,10 +174,10 @@ Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.F-resp-≈ 
 SkewBimod .Skew._⇒₂_ {A = 𝔸} {B = 𝔹} p q = NaturalTransformation p q
 SkewBimod .Skew._≈_ = {!!}
 SkewBimod .Skew.id₂ = {!!}
-SkewBimod .Skew._⊗₂_ = {!!}
+SkewBimod .Skew._∘ₕ_ = {!!}
 SkewBimod .Skew._∘ᵥ_ = {!!}
 SkewBimod .Skew.λ⇒ = {!!}
-SkewBimod .Skew.ρ'⇒ = {!!}
+SkewBimod .Skew.ρ′⇒ = {!!}
 SkewBimod .Skew.α⇒ = {!!}
-SkewBimod .Skew.makeThisFieldNonEmpty = {!!}
 SkewBimod .Skew.pentagon = {!!}
+SkewBimod .Skew.rectangle = {!!}
