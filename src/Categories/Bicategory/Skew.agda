@@ -61,12 +61,13 @@ record Skew o ℓ e t : Set (suc (o ⊔ ℓ ⊔ e ⊔ t)) where
   field
     -- 2-cells
     _⇒₂_ : {A B : Obj} → A ⇒₁ B → A ⇒₁ B → Set e
-    _≈_ : {A B : Obj} {f g : A ⇒₁ B} → Rel (f ⇒₂ g) e
     id₂ : {A B : Obj} {f : A ⇒₁ B} → f ⇒₂ f
-    _∘ₕ_ : {A B C : Obj} {g i : B ⇒₁ C} {f h : A ⇒₁ B} → g ⇒₂ i → f ⇒₂ h → g ∘₁ f ⇒₂ i ∘₁ h
+    _∘ₕ_ : {A B C : Obj} {f h : A ⇒₁ B} {g k : B ⇒₁ C} → g ⇒₂ k → f ⇒₂ h → g ∘₁ f ⇒₂ k ∘₁ h
     _∘ᵥ_ : {A B : Obj} {f g h : A ⇒₁ B} -> (β : g ⇒₂ h) → (α : f ⇒₂ g) → f ⇒₂ h
 
-  _⊗₂_ : {A B C : Obj} {g i : B ⇒₁ C} {f h : A ⇒₁ B} → f ⇒₂ h → g ⇒₂ i → g ∘₁ f ⇒₂ i ∘₁ h
+    _≈_ : {A B : Obj} {f g : A ⇒₁ B} → Rel (f ⇒₂ g) e
+
+  _⊗₂_ : {A B C : Obj} {f h : A ⇒₁ B} {g k : B ⇒₁ C} → f ⇒₂ h → g ⇒₂ k → g ∘₁ f ⇒₂ k ∘₁ h
   f ⊗₂ g = g ∘ₕ f
 
   field
