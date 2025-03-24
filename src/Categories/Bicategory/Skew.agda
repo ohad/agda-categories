@@ -85,8 +85,9 @@ record Skew o ℓ e t : Set (suc (o ⊔ ℓ ⊔ e ⊔ t)) where
     pentagon : {A B C D E : Obj} {f : A ⇒₁ B} {g : B ⇒₁ C} {h : C ⇒₁ D} {k : D ⇒₁ E}
              → (assoc f g (h ⊗ k) ∘ᵥ assoc (f ⊗ g) h k) ≈ (((id₂ ⊗₂ α⇒) ∘ᵥ α⇒) ∘ᵥ (α⇒ ⊗₂ id₂))
 
+    -- These are incomprehensible, one really ought to draw the diagrams!
     rectangle : {A B C : Obj} {f : A ⇒₁ B} {g : B ⇒₁ C}
-              → (((ρ′⇒ ⊗₂ id₂) ∘ₕ α⇒) ∘ₕ (id₂ ⊗₂ λ⇒)) ≈ id₂
+              → (((id₂ {f = f}  ⊗₂ λ⇒) ∘ᵥ α⇒) ∘ᵥ (ρ′⇒ ⊗₂ id₂ {f = g})) ≈ id₂
 
   -- Help here: I'm trying to show that vertical/horizontal composition preserves ≈, as discussed last week, but I'm not sure how to continue.
   ∘ₕ-resp-≈ : {A B C : Obj} {f g : A ⇒₁ B} {h k : B ⇒₁ C} {α α′ : f ⇒₂ g} {β β′ : h ⇒₂ k} → α ≈ α′ → β ≈ β′ → (β ∘ₕ α) ≈ (β′ ∘ₕ α′)
