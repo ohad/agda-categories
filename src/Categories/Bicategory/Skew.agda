@@ -89,10 +89,19 @@ record Skew o ℓ e t : Set (suc (o ⊔ ℓ ⊔ e ⊔ t)) where
     pentagon : {A B C D E : Obj} {f : A ⇒₁ B} {g : B ⇒₁ C} {h : C ⇒₁ D} {k : D ⇒₁ E}
              → (assoc f g (h ⊗ k) ∘ᵥ assoc (f ⊗ g) h k) ≈ (((id₂ ⊗₂ α⇒) ∘ᵥ α⇒) ∘ᵥ (α⇒ ⊗₂ id₂))
 
+    -- Triangles and rectangle
     -- These are incomprehensible, one really ought to draw the diagrams!
     rectangle : {A B C : Obj} {f : A ⇒₁ B} {g : B ⇒₁ C}
               → (((id₂ {f = f}  ⊗₂ λ⇒) ∘ᵥ α⇒) ∘ᵥ (ρ′⇒ ⊗₂ id₂ {f = g})) ≈ id₂
 
+    skew-left : {A B C : Obj} {f : A ⇒₁ B} {g : B ⇒₁ C}
+              → (λ⇒ ∘ᵥ α⇒ {g = f}) ≈ (λ⇒ ⊗₂ id₂ {f = g})
+
+    skew-right : {A B C : Obj} {f : A ⇒₁ B} {g : B ⇒₁ C}
+               → (α⇒ {f = f} {g = g} ∘ᵥ ρ′⇒) ≈ (id₂ ⊗₂ ρ′⇒)
+
+    skew-triangle : {A B C : Obj} {f : A ⇒₁ B} {g : B ⇒₁ C}
+                  → (λ⇒ ∘ᵥ ρ′⇒) ≈ id₂ {f = id₁ {A = A}}
 
 {-
 
