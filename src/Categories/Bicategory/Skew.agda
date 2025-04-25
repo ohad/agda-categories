@@ -170,19 +170,19 @@ record Skew o ℓ e t : Set (suc (o ⊔ ℓ ⊔ e ⊔ t)) where
                    α⇒
                  ⟩
 -}
-
 open import Categories.Category.Construction.Presheaves using (Presheaves)
 open import Categories.Category.Construction.Functors
 open import Categories.Category.Product using (Product)
 open import Categories.Category.Instance.Setoids using (Setoids)
 open import Data.Product using (Σ; _×_)
+open import Data.Product.Relation.Binary.Pointwise.NonDependent using (_×ₛ_)
 
 -- Move this to Skew/Constructions/Bimodules
 SkewBimod : {o ℓ e t o′ ℓ′ : Level} → Skew (suc (o ⊔ ℓ ⊔ e)) (o ⊔ ℓ ⊔ e ⊔ suc o′ ⊔ suc ℓ′) (o ⊔ ℓ ⊔ o′ ⊔ ℓ′) t
 SkewBimod {o} {ℓ} {e} .Skew.Obj = Category o ℓ e
 SkewBimod {o′ = o′} {ℓ′ = ℓ′} .Skew._⇒₁_ 𝔸 𝔹 = Presheaves {o′ = o′} {ℓ′ = ℓ′} (Product (Category.op 𝔸) 𝔹) .Category.Obj
 SkewBimod {o′ = o′} {ℓ′ = ℓ′} .Skew.id₁ {A = 𝔸} = {!!}
-Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.F₀ (a , c) = {!!}  -- Product of setoids
+Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.F₀ (a , c) = {!? ×ₛ ?!}
 Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.F₁ = {!!}
 Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.identity = {!!}
 Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.homomorphism = {!!}
@@ -197,3 +197,8 @@ SkewBimod .Skew.ρ′⇒ = {!!}
 SkewBimod .Skew.α⇒ = {!!}
 SkewBimod .Skew.pentagon = {!!}
 SkewBimod .Skew.rectangle = {!!}
+SkewBimod .Skew.skew-left = {!!}
+SkewBimod .Skew.skew-right = {!!}
+SkewBimod .Skew.skew-triangle = {!!}
+SkewBimod .Skew.∘ₕ-resp-≈ = {!!}
+SkewBimod .Skew.∘ᵥ-resp-≈ = {!!}
