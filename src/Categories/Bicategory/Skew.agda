@@ -4,7 +4,7 @@ module Categories.Bicategory.Skew where
 
 open import Level
 open import Data.Product using (_,_)
-open import Relation.Binary using (Rel)
+open import Relation.Binary using (Rel; Setoid; IsEquivalence)
 
 open import Categories.Category using (Category; module Commutation)
 open import Categories.Category.Monoidal.Instance.Cats using (module Product)
@@ -176,6 +176,25 @@ open import Categories.Category.Product using (Product)
 open import Categories.Category.Instance.Setoids using (Setoids)
 open import Data.Product using (Σ; _×_)
 open import Data.Product.Relation.Binary.Pointwise.NonDependent using (_×ₛ_)
+
+open Setoid
+
+module _ {ℓ₁ ℓ₂ : Level} (S : Set) (R : (s : S) → Setoid ℓ₁ ℓ₂ ) where
+
+  data SetoidCoprodEquivExplicit
+    : (s₁ : S) → (r₁ : Carrier (R s₁)) →
+      (s₂ : S) → (r₁ : Carrier (R s₂)) → Set (ℓ₁ ⊔ ℓ₂) where
+    _⊩_≈_by_ : (s : S) → (r₁ r₂ : Carrier (R s)) → ((R s)._≈_ r₁ r₂ ) →
+      SetoidCoprodEquivExplicit s r₁ s r₂
+
+
+  SetoidCoprodEquiv : Rel (Σ S (λ s → Carrier (R s))) {!!}
+  SetoidCoprodEquiv (s₁ , r₁) (s₂ , r₂) = SetoidCoprodEquivExplicit s₁ r₁ s₂ r₂
+
+  SetoidCoprodIsEquivalence : IsEquivalence SetoidCoprodEquiv
+  IsEquivalence.refl SetoidCoprodIsEquivalence {s , r} = s ⊩ r ≈ r by (R s).refl
+  IsEquivalence.sym SetoidCoprodIsEquivalence = {!!}
+  IsEquivalence.trans SetoidCoprodIsEquivalence = {!!}
 
 -- Move this to Skew/Constructions/Bimodules
 SkewBimod : {o ℓ e t o′ ℓ′ : Level} → Skew (suc (o ⊔ ℓ ⊔ e)) (o ⊔ ℓ ⊔ e ⊔ suc o′ ⊔ suc ℓ′) (o ⊔ ℓ ⊔ o′ ⊔ ℓ′) t
