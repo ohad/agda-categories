@@ -176,19 +176,25 @@ open import Categories.Category.Product using (Product)
 open import Categories.Category.Instance.Setoids using (Setoids)
 open import Data.Product using (Σ; _×_)
 open import Data.Product.Relation.Binary.Pointwise.NonDependent using (_×ₛ_)
+open import Function.Bundles
+
 
 open Setoid
+open Functor
+open Func
 
-module _ {ℓ₁ ℓ₂ : Level} (S : Set) (R : (s : S) → Setoid ℓ₁ ℓ₂ ) where
+module _ {ℓ₀ ℓ₁ ℓ₂ : Level} (S : Set ℓ₀) (R : (s : S) → Setoid ℓ₁ ℓ₂ ) where
 
   data SetoidCoprodEquivExplicit
     : (s₁ : S) → (r₁ : Carrier (R s₁)) →
-      (s₂ : S) → (r₁ : Carrier (R s₂)) → Set (ℓ₁ ⊔ ℓ₂) where
+      (s₂ : S) → (r₁ : Carrier (R s₂)) → Set (ℓ₀ ⊔ ℓ₁ ⊔ ℓ₂) where
     _⊩_≈_by_ : (s : S) → (r₁ r₂ : Carrier (R s)) → ((R s)._≈_ r₁ r₂ ) →
       SetoidCoprodEquivExplicit s r₁ s r₂
 
+  SetoidCoprodCarrier : Set (ℓ₀ ⊔ ℓ₁)
+  SetoidCoprodCarrier = (Σ S (λ s → Carrier (R s)))
 
-  SetoidCoprodEquiv : Rel (Σ S (λ s → Carrier (R s))) {!!}
+  SetoidCoprodEquiv : Rel SetoidCoprodCarrier (ℓ₀ ⊔ ℓ₁ ⊔ ℓ₂)
   SetoidCoprodEquiv (s₁ , r₁) (s₂ , r₂) = SetoidCoprodEquivExplicit s₁ r₁ s₂ r₂
 
   SetoidCoprodIsEquivalence : IsEquivalence SetoidCoprodEquiv
@@ -196,13 +202,22 @@ module _ {ℓ₁ ℓ₂ : Level} (S : Set) (R : (s : S) → Setoid ℓ₁ ℓ₂
   IsEquivalence.sym SetoidCoprodIsEquivalence (s ⊩ r₁ ≈ r₂ by prf) = s ⊩ r₂ ≈ r₁ by R s .sym prf
   IsEquivalence.trans SetoidCoprodIsEquivalence (s ⊩ r₁ ≈ r₂ by prf₁) (s ⊩ r₂ ≈ r₃ by prf₂) = s ⊩ r₁ ≈ r₃ by (R s).trans prf₁ prf₂
 
+  SetoidCoprod : Setoid (ℓ₀ ⊔ ℓ₁) (ℓ₀ ⊔ ℓ₁ ⊔ ℓ₂)
+  Carrier SetoidCoprod = SetoidCoprodCarrier
+  _≈_ SetoidCoprod = SetoidCoprodEquiv
+  isEquivalence SetoidCoprod = SetoidCoprodIsEquivalence
+
 -- Move this to Skew/Constructions/Bimodules
-SkewBimod : {o ℓ e t o′ ℓ′ : Level} → Skew (suc (o ⊔ ℓ ⊔ e)) (o ⊔ ℓ ⊔ e ⊔ suc o′ ⊔ suc ℓ′) (o ⊔ ℓ ⊔ o′ ⊔ ℓ′) t
-SkewBimod {o} {ℓ} {e} .Skew.Obj = Category o ℓ e
-SkewBimod {o′ = o′} {ℓ′ = ℓ′} .Skew._⇒₁_ 𝔸 𝔹 = Presheaves {o′ = o′} {ℓ′ = ℓ′} (Product (Category.op 𝔸) 𝔹) .Category.Obj
-SkewBimod {o′ = o′} {ℓ′ = ℓ′} .Skew.id₁ {A = 𝔸} = {!!}
-Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.F₀ (a , c) = {!? ×ₛ ?!}
-Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.F₁ = {!!}
+SkewBimod : {o ℓ e t o′ ℓ′ : Level} → Skew {!!} {!!} {!!} t
+SkewBimod {o} {ℓ} {e} .Skew.Obj = Category {!!} {!!} {!!} --o ℓ e
+SkewBimod {o} {ℓ} {e} {o′} {ℓ′} .Skew._⇒₁_ 𝔸 𝔹
+  = Presheaves {o = {!!}} {ℓ = {!!} } {e = {!!}} {o′ = {!!}} {ℓ′ = {!!}}
+      (Product (Category.op 𝔸) 𝔹) .Category.Obj
+SkewBimod {o′} {ℓ′} .Skew.id₁ {A = 𝔸} = {!!}
+Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.F₀ (a , c)
+  = SetoidCoprod (𝔹 .Category.Obj) λ b → q .F₀ (a , b) ×ₛ p .F₀ (b , c)
+(Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .F₁ {a , c} {a′ , c′} (f , h)) .to = {!!}
+(Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .F₁ {a , c} {a′ , c′} (f , h)) .cong = {!!}
 Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.identity = {!!}
 Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.homomorphism = {!!}
 Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.F-resp-≈ = {!!}
