@@ -194,7 +194,7 @@ module _ {ℓ₁ ℓ₂ : Level} (S : Set) (R : (s : S) → Setoid ℓ₁ ℓ₂
   SetoidCoprodIsEquivalence : IsEquivalence SetoidCoprodEquiv
   IsEquivalence.refl SetoidCoprodIsEquivalence {s , r} = s ⊩ r ≈ r by (R s).refl
   IsEquivalence.sym SetoidCoprodIsEquivalence = {!!}
-  IsEquivalence.trans SetoidCoprodIsEquivalence = {!!}
+  IsEquivalence.trans SetoidCoprodIsEquivalence (s ⊩ r₁ ≈ r₂ by prf₁) (s ⊩ r₂ ≈ r₃ by prf₂) = s ⊩ r₁ ≈ r₃ by (R s).trans prf₁ prf₂
 
 -- Move this to Skew/Constructions/Bimodules
 SkewBimod : {o ℓ e t o′ ℓ′ : Level} → Skew (suc (o ⊔ ℓ ⊔ e)) (o ⊔ ℓ ⊔ e ⊔ suc o′ ⊔ suc ℓ′) (o ⊔ ℓ ⊔ o′ ⊔ ℓ′) t
