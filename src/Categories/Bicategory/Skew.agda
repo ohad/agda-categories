@@ -216,16 +216,22 @@ SkewBimod {o} {ℓ} {e} {o′} {ℓ′} .Skew._⇒₁_ 𝔸 𝔹
 SkewBimod {o′} {ℓ′} .Skew.id₁ {A = 𝔸} = {!!}
 Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.F₀ (a , c)
   = SetoidCoprod (𝔹 .Category.Obj) λ b → q .F₀ (a , b) ×ₛ p .F₀ (b , c)
-(Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .F₁ {a , c} {a′ , c′} (f , h)) .to = {!!}
-(Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .F₁ {a , c} {a′ , c′} (f , h)) .cong = {!!}
-Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.identity = {!!}
+(Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .F₁ {a , c} {a′ , c′} (f , h)) .to = λ z →  -- mimer generated def
+                                                                                         z .Data.Product.proj₁ ,
+                                                                                         q .F₁ (f , 𝔹 .Category.id) .to
+                                                                                         (z .Data.Product.proj₂ .Data.Product.proj₁)
+                                                                                         ,
+                                                                                         p .F₁ (𝔹 .Category.id , h) .to
+                                                                                         (z .Data.Product.proj₂ .Data.Product.proj₂)
+(Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .F₁ {a , c} {a′ , c′} (f , h)) .cong = λ x₁ → {!_≈_ x₁!}
+Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.identity = {!!}  -- Mimer crash https://github.com/agda/agda/issues/7639
 Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.homomorphism = {!!}
 Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.F-resp-≈ = {!!}
 SkewBimod .Skew._⇒₂_ {A = 𝔸} {B = 𝔹} p q = NaturalTransformation p q
-SkewBimod .Skew._≈_ = {!!}
-SkewBimod .Skew.id₂ = {!!}
-SkewBimod .Skew._∘ₕ_ = {!!}
-SkewBimod .Skew._∘ᵥ_ = {!!}
+SkewBimod .Skew._≈_ α β = Set {!!}
+SkewBimod .Skew.id₂ = record { η = λ X → record { to = λ z → z ; cong = λ {x} {y} z → z } ; commute = λ f₁ → λ {c} → {!!} ; sym-commute = {!!} }
+SkewBimod .Skew._∘ₕ_ = λ β α → {!!} Categories.NaturalTransformation.∘ₕ {!!}
+SkewBimod .Skew._∘ᵥ_ = λ β α → β Categories.NaturalTransformation.∘ᵥ α
 SkewBimod .Skew.λ⇒ = {!!}
 SkewBimod .Skew.ρ′⇒ = {!!}
 SkewBimod .Skew.α⇒ = {!!}
