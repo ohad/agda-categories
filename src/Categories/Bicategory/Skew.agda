@@ -52,10 +52,10 @@ record Skew o ℓ e t : Set (suc (o ⊔ ℓ ⊔ e ⊔ t)) where
     --_⇒₁_ : Obj → Obj → Set o
     _⇒₁_ : Rel Obj ℓ
     --_≈_ : {A B : Obj} → Rel (A ⇒₁ B) e  -- might not need this
-    id₁ : {A : Obj} -> A ⇒₁ A
-    _∘₁_ : {A B C : Obj} -> B ⇒₁ C → A ⇒₁ B → A ⇒₁ C
+    id₁ : {A : Obj} → A ⇒₁ A
+    _∘₁_ : {A B C : Obj} → B ⇒₁ C → A ⇒₁ B → A ⇒₁ C
 
-  _⊗_ : {A B C : Obj} -> A ⇒₁ B → B ⇒₁ C → A ⇒₁ C
+  _⊗_ : {A B C : Obj} → A ⇒₁ B → B ⇒₁ C → A ⇒₁ C
   f ⊗ g = g ∘₁ f
 
   field
@@ -63,7 +63,7 @@ record Skew o ℓ e t : Set (suc (o ⊔ ℓ ⊔ e ⊔ t)) where
     _⇒₂_ : {A B : Obj} → A ⇒₁ B → A ⇒₁ B → Set e
     id₂ : {A B : Obj} {f : A ⇒₁ B} → f ⇒₂ f
     _∘ₕ_ : {A B C : Obj} {f h : A ⇒₁ B} {g k : B ⇒₁ C} → g ⇒₂ k → f ⇒₂ h → g ∘₁ f ⇒₂ k ∘₁ h
-    _∘ᵥ_ : {A B : Obj} {f g h : A ⇒₁ B} -> (β : g ⇒₂ h) → (α : f ⇒₂ g) → f ⇒₂ h
+    _∘ᵥ_ : {A B : Obj} {f g h : A ⇒₁ B} → (β : g ⇒₂ h) → (α : f ⇒₂ g) → f ⇒₂ h
 
     _≈_ : {A B : Obj} {f g : A ⇒₁ B} → Rel (f ⇒₂ g) e
 
