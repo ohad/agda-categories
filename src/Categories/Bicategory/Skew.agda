@@ -207,23 +207,27 @@ module _ {ℓ₀ ℓ₁ ℓ₂ : Level} (S : Set ℓ₀) (R : (s : S) → Setoid
   _≈_ SetoidCoprod = SetoidCoprodEquiv
   isEquivalence SetoidCoprod = SetoidCoprodIsEquivalence
 
+open import Data.Product.Function.NonDependent.Setoid
+open import Categories.Category.BinaryProducts using (BinaryProducts)
+open BinaryProducts using (_⁂_)
+
 -- Move this to Skew/Constructions/Bimodules
 SkewBimod : {o ℓ e t o′ ℓ′ : Level} → Skew {!!} {!!} {!!} t
 SkewBimod {o} {ℓ} {e} .Skew.Obj = Category {!!} {!!} {!!} --o ℓ e
 SkewBimod {o} {ℓ} {e} {o′} {ℓ′} .Skew._⇒₁_ 𝔸 𝔹
   = Presheaves {o = {!!}} {ℓ = {!!} } {e = {!!}} {o′ = {!!}} {ℓ′ = {!!}}
       (Product (Category.op 𝔸) 𝔹) .Category.Obj
-SkewBimod {o′} {ℓ′} .Skew.id₁ {A = 𝔸} = {!!}
+SkewBimod {o′} {ℓ′} .Skew.id₁ {A = 𝔸} = {!Presheaves ?!}
 Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.F₀ (a , c)
   = SetoidCoprod (𝔹 .Category.Obj) λ b → q .F₀ (a , b) ×ₛ p .F₀ (b , c)
-(Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .F₁ {a , c} {a′ , c′} (f , h)) .to = λ z →  -- mimer generated def
-                                                                                         z .Data.Product.proj₁ ,
-                                                                                         q .F₁ (f , 𝔹 .Category.id) .to
-                                                                                         (z .Data.Product.proj₂ .Data.Product.proj₁)
-                                                                                         ,
-                                                                                         p .F₁ (𝔹 .Category.id , h) .to
-                                                                                         (z .Data.Product.proj₂ .Data.Product.proj₂)
-(Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .F₁ {a , c} {a′ , c′} (f , h)) .cong = λ x₁ → {!_≈_ x₁!}
+Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .F₁ {a , c} {a′ , c′} (f , g) .to (b , x , y) =
+  b , (q .F₁ (f , 𝔹 .Category.id) .to x) , (p .F₁ (𝔹 .Category.id , g) .to y)
+Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .F₁ {a , c} {a′ , c′} (f , h) .cong (b ⊩ x₁ , y₁ ≈ x₂ , y₂ by prf)
+  = let Q = q .F₁ (f , 𝔹 .Category.id)
+        P = p .F₁ (𝔹 .Category.id , h)
+     in b ⊩ Q .to x₁ , P .to y₁
+          ≈ Q .to x₂ , P .to y₂
+          by {!? ⁂ ?!} --< Q , {!P!} >ₛ .cong {!!}
 Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.identity = {!!}  -- Mimer crash https://github.com/agda/agda/issues/7639
 Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.homomorphism = {!!}
 Skew._∘₁_ SkewBimod {A = 𝔸} {B = 𝔹} {C = ℂ} p q .Functor.F-resp-≈ = {!!}
